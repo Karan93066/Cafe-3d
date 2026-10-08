@@ -179,24 +179,23 @@ export default function App() {
 
     const videos = [forest, beans, scene];
 
-    let initialised = false;
+    let initialized = false;
+    let disposed = false;
 
     const prepareVideo = (video) => {
       video.muted = true;
+      video.defaultMuted = true;
       video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "");
       video.preload = "auto";
 
       video.pause();
-
-      try {
-        video.currentTime = 0.001;
-      } catch {
-        // browser still preparing
-      }
+      video.load();
     };
 
     const checkReady = () => {
-      if (initialised) return;
+      if (initialized || disposed) return;
 
       const allReady = videos.every(
         (video) =>
@@ -207,9 +206,7 @@ export default function App() {
 
       if (!allReady) return;
 
-      initialised = true;
-
-      videos.forEach(prepareVideo);
+      initialized = true;
 
       forestTargetTime.current = 0;
       forestRenderedTime.current = 0;
@@ -220,22 +217,40 @@ export default function App() {
       sceneTargetTime.current = 0;
       sceneRenderedTime.current = 0;
 
+      videos.forEach((video) => {
+        video.pause();
+
+        try {
+          video.currentTime = 0.001;
+        } catch (error) {
+          console.warn("Initial video seek failed:", error);
+        }
+      });
+
       setVideoReady(true);
 
       requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
+        if (!disposed) ScrollTrigger.refresh();
       });
     };
 
     videos.forEach((video) => {
       video.addEventListener("loadedmetadata", checkReady);
+      video.addEventListener("durationchange", checkReady);
+      video.addEventListener("loadeddata", checkReady);
+
+      prepareVideo(video);
     });
 
     checkReady();
 
     return () => {
+      disposed = true;
+
       videos.forEach((video) => {
         video.removeEventListener("loadedmetadata", checkReady);
+        video.removeEventListener("durationchange", checkReady);
+        video.removeEventListener("loadeddata", checkReady);
       });
     };
   }, []);
@@ -837,8 +852,13 @@ export default function App() {
 
       rafId = requestAnimationFrame(render);
     };
-
+    // Keep original precise scroll scrubbing on desktop.
     rafId = requestAnimationFrame(render);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      ctx.revert();
+    };
 
     return () => {
       cancelAnimationFrame(rafId);
@@ -930,7 +950,7 @@ export default function App() {
           <video
             ref={forestRef}
             className="forest-video"
-            src="/forest.mov"
+            src="/forest.mp4"
             muted
             playsInline
             preload="auto"
@@ -941,7 +961,7 @@ export default function App() {
           <video
             ref={beansRef}
             className="beans-video"
-            src="/beans.mov"
+            src="/beans.mp4"
             muted
             playsInline
             preload="auto"
