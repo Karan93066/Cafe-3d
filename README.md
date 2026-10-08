@@ -1,17 +1,6 @@
-# Black Coffee Cafe — Awwwards-style 3D Scroll Homepage
+# Black Coffee Café — Cinematic Hero / Farm
 
-A cinematic homepage prototype built with **Next.js (JavaScript), Three.js and GSAP ScrollTrigger**.
-
-## What changed in this version
-
-- One **persistent fixed Three.js cup** travels through the whole page instead of living only in the hero.
-- Every scroll chapter gives the cup a new position, scale, rotation and camera distance.
-- Page background transitions with the chapter.
-- Long-form **2018 → 2024** history section.
-- Horizontal menu journey driven by vertical scroll.
-- Layered, parallax café-photo collage using image URLs from the current BCC website.
-- Source-site menu items/prices, guarantee copy, sustainability themes, contact and Noida address.
-- Responsive/mobile scene choreography and reduced-motion handling.
+First production slice for the Farm → Cup homepage journey.
 
 ## Run
 
@@ -20,29 +9,27 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000
+Then open the local Vite URL and **scroll through the full hero**. The hero is intentionally ~270vh tall because scroll position controls the film.
 
-## Stack
+## Included
 
-- Next.js / React
-- JavaScript
-- Three.js
-- GSAP + ScrollTrigger
+- React + Vite
+- Tailwind CSS
+- Lenis smooth scrolling
+- GSAP + ScrollTrigger cinematic scrub timeline
+- Three.js atmospheric depth layer
+- Bundled local H.264 hero demo media
+- Bundled 6-frame WebP fallback sequence
+- Video scroll seeking + frame-sequence fallback
+- Desktop + mobile animation paths
+- Farm → Origin handoff ready for Harvest
 
-## Brand/source data
+## Media
 
-Content and image URLs in this concept are drawn from the current Black Coffee Cafe website (`https://theblackcoffeecafe.com/`) for redesign/prototyping purposes. For production, download and optimize the approved brand assets into `/public` instead of hot-linking them.
+Working local media is already included in `public/media/`.
 
-## Main files
+The frame sequence is always present under the video, so the hero still animates if video decoding or seeking fails. See `public/media/README.md` for the production replacement contract.
 
-- `components/ScrollWorld.js` — fixed Three.js world + scroll-based 3D choreography
-- `components/HomeExperience.js` — page chapters + DOM/GSAP interactions
-- `app/globals.css` — art direction and responsive layout
+## Important
 
-## Recommended production upgrades
-
-1. Replace the procedural cup with an approved `.glb` scan/model of the real BCC cup.
-2. Optimize image assets locally using AVIF/WebP.
-3. Add Lenis only if you want inertial smooth scrolling (ScrollTrigger works without it).
-4. Add a CMS/data source for menu prices and locations.
-5. Add route transitions only after the homepage motion system is finalized.
+The included farm visuals are demo assets for validating the implementation locally. Replace them with final approved/licensed Black Coffee Café campaign footage before production launch.

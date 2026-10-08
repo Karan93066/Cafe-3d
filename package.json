@@ -1,18 +1,28 @@
 {
-  "name": "black-coffee-3d-homepage",
-  "version": "1.0.0",
+  "name": "black-coffee-cafe-cinematic",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "gsap": "3.15.0",
-    "next": "16.3.3",
-    "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "three": "0.185.1"
+    "@studio-freight/lenis": "^1.0.42",
+    "@vitejs/plugin-react": "latest",
+    "gsap": "latest",
+    "lenis": "latest",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.2.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "three": "^0.186.1",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "autoprefixer": "latest",
+    "postcss": "latest",
+    "tailwindcss": "^3.4.17"
   }
 }
