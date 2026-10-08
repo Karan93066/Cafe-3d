@@ -572,15 +572,18 @@ export default function CupReveal() {
     };
   }, []);
 
-  const toggleCup = () => {
-    const timeline = timelineRef.current;
+  const openCup = () => {
+    if (!timelineRef.current) return;
 
-    if (!timeline) return;
+    setOpen(true);
+    timelineRef.current.timeScale(1).play();
+  };
 
-    const next = !open;
-    setOpen(next);
-    if (next) timeline.timeScale(1).play();
-    else timeline.timeScale(1.15).reverse();
+  const closeCup = () => {
+    if (!timelineRef.current) return;
+
+    setOpen(false);
+    timelineRef.current.timeScale(1.15).reverse();
   };
 
   return (
@@ -637,23 +640,29 @@ export default function CupReveal() {
           ))}
         </div>
 
-        <div ref={promptRef} className="cup-reveal__prompt">
-          <span>THE BCC CUP</span>
-
-          <strong>Click to open</strong>
-
-          <small>Discover what sits behind the cup.</small>
-        </div>
-
         <div ref={glowRef} className="cup-reveal__glow" aria-hidden="true" />
 
         <button
           ref={cupRef}
           className="cup-reveal__cup"
           type="button"
-          onClick={toggleCup}
+          onPointerEnter={(e) => {
+            if (e.pointerType === "mouse" || e.pointerType === "pen") {
+              openCup();
+            }
+          }}
+          onPointerLeave={(e) => {
+            if (e.pointerType === "mouse" || e.pointerType === "pen") {
+              closeCup();
+            }
+          }}
+          onClick={(e) => {
+            if (e.detail === 0 || window.matchMedia("(hover: none)").matches) {
+              open ? closeCup() : openCup();
+            }
+          }}
           aria-expanded={open}
-          aria-label={open ? "Close the BCC cup" : "Open the BCC cup"}>
+          aria-label="Discover the BCC cup">
           <span className="cup-reveal__steam" aria-hidden="true">
             <i />
 
@@ -677,8 +686,6 @@ export default function CupReveal() {
             alt="Black Coffee Cafe takeaway cup"
             draggable="false"
           />
-
-          <span className="cup-reveal__hint">{open ? "Close" : "Open"}</span>
         </button>
       </div>
     </section>
